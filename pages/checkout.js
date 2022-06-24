@@ -46,9 +46,9 @@ const checkout = () => {
 
 {
   cart.length > 0 ? 
-    <h1 className="text-center"><strong>{totalPrice()}</strong> BDT</h1>
+    <h1 className="text-center text-3xl mt-2">Total Price: <strong>{totalPrice()}</strong> BDT</h1>
    : 
-   <h1 className="text-center text-red-500">Your cart is empty rigth now</h1>
+   <h1 className="text-center text-3xl mt-2 text-red-500">Your cart is empty rigth now</h1>
 }
     
    {/* form starts here */}

@@ -10,6 +10,18 @@ const CartItem = ({ id, productName, productImage, qty, removeItemCart, editItem
     setQuantity(qty)
   },[qty])
 
+
+  const handleChange = e => {
+    const itemQty = parseInt(e.target.value)
+
+    if (itemQty > 0) {
+      setQuantity(itemQty)
+      return
+    }
+
+    alert('You must add quantity of 1 item at least')
+  }
+
   
   return (
     <>
@@ -33,7 +45,8 @@ const CartItem = ({ id, productName, productImage, qty, removeItemCart, editItem
 
 <div className="w-full py-2 md:py-0 px-2 pb-2">
 <label htmlFor="qty">Quantity</label><br/>
-<input type="number" id="qty" placeholder="Your Quantity" value={quantity} onChange={e => setQuantity(parseInt(e.target.value))}
+<input type="number" id="qty" placeholder="Your Quantity" value={quantity} 
+onChange={handleChange}
 className="border w-full h-8 rounded outline-none p-2 mt-2" />
 </div>
 

@@ -3,6 +3,9 @@ import CartItem from './CartItem'
 import { AuthenticationContext } from '../config/authContext'
 import Link from 'next/link'
 
+// import { ToastContainer, toast } from 'react-toastify'
+// import 'react-toastify/dist/ReactToastify.css'
+
 
 const Cart = ({ cartShow, hideShowCart }) => {
 
@@ -58,6 +61,21 @@ const Cart = ({ cartShow, hideShowCart }) => {
 
 
   return (
+    <>
+
+    {/* <ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+/> */}
+
+
     <div className={`w-1/2 lg:w-1/4 fixed ${cartShow ? 'right-0' : 'right-[-100%]'} 
     bottom-0 top-0 z-50 bg-white transition overflow-y-scroll`}>
    <button onClick={hideShowCart} className="btn-primary">Close</button>
@@ -84,6 +102,7 @@ const Cart = ({ cartShow, hideShowCart }) => {
       </Link></center> : <h1 className='text-center'>Cart is empty now!</h1>
     }
     </div>
+    </>
   )
 }
 
