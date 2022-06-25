@@ -113,11 +113,17 @@ const checkout = () => {
     }
   }
 
+
+  //request an order
+// const requestForOrder =
+
+
   //for adding order
   const addOrder = async (type) => {
 
-    if (type === 'cash-on-delivery') {
-      requestForOrder()
+    if (type === onCashDelivery) {
+     
+      
       
       return
     }
