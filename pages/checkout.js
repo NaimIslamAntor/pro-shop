@@ -11,25 +11,117 @@ const checkout = () => {
 
 
   const router = useRouter()
-  const {auth, cart} = useContext(AuthenticationContext)
+  const {auth, setAuth, cart} = useContext(AuthenticationContext)
 
 
  const [address1, setAddress1] =  useState('')
- const [addres2, setAddress2] =  useState('')
+ const [address2, setAddress2] =  useState('')
 
  const [phoneNumber, setPhoneNumber] =  useState('')
  const [zipCode, setZipcode] =  useState('')
 
 
+ const onCashDelivery = 'cash-on-delivery'
+ const bkash = 'bkash'
+
+ //if not authenticated
   useEffect(()=>{
     
-    //if not authenticated
     if (!localStorage.getItem('authInfo')) {
       router.push('/auth/login')
     }
 
   }, [auth])
 
+
+  // set those values if exists
+  useEffect(()=>{
+
+    setAddress1(auth?.address1 || '')
+    setAddress2(auth?.address2 || '')
+    setPhoneNumber(auth?.phoneNumber || '')
+    setZipcode(auth?.zipCode || '')
+    
+    return () => {
+      setAddress1('')
+      setAddress2('')
+      setPhoneNumber('')
+      setZipcode('')
+    }
+
+  }, [auth])
+
+
+
+  //for saving user info
+  const saveUserInfo = async () => {
+
+    const creds = {
+      address1,
+      address2,
+      phoneNumber,
+      zipCode,
+    }
+
+    const config = {
+      headers: {
+         "Authorization": `Bearer ${auth.token}`,
+      }
+    }
+
+
+
+    try {
+      const request = await axios.put('/api/auth/authinfo', creds, config)
+      const response = request.data
+
+      const existingUser = JSON.parse(localStorage.getItem('authInfo'))
+
+      const user = {
+        ...existingUser,
+        ...response,
+      }
+
+      localStorage.setItem('authInfo', JSON.stringify(user))
+
+      setAuth(user)
+
+
+      toast.success('Info saved successfully', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+  
+
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+
+      console.log(error.response);
+    }
+  }
+
+  //for adding order
+  const addOrder = async (type) => {
+
+    if (type === 'cash-on-delivery') {
+      requestForOrder()
+      
+      return
+    }
+  }
 
   //calculate total price
   const totalPrice = () => {
@@ -43,6 +135,19 @@ const checkout = () => {
 
   return (
     <div className='pt-14 md:pt-24'>
+
+
+<ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+/>
 
 {
   cart.length > 0 ? 
@@ -61,13 +166,13 @@ const checkout = () => {
       <div className="w-full md:w-1/2 py-2 md:py-0 px-2">
       <label htmlFor="addessOne">Address 1</label><br/>
       <input type="text" id="addessOne" placeholder="District, Thana, union etc"
-       className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setAddress1(e.target.value)}/>
+       className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setAddress1(e.target.value)} value={address1} />
       </div>
 
       <div className="w-full md:w-1/2 py-2 md:py-0 px-2">
       <label htmlFor="addressTwo">Address 2(optional)</label><br />
      <input type="text" id="addressTwo" placeholder="Road number etc"  
-        className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setAddress2(e.target.value)}/>
+        className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setAddress2(e.target.value)} value={address2}/>
       </div>
      
    </div>
@@ -79,7 +184,7 @@ const checkout = () => {
 <div className="w-full py-2 md:py-0 px-2">
 <label htmlFor="zipCode">Phone number</label><br/>
 <input type="number" id="zipCode" placeholder="Your Phone Number" 
- className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setPhoneNumber(e.target.value)}/>
+ className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setPhoneNumber(e.target.value)} value={phoneNumber}/>
 </div>
  
 </div>
@@ -91,35 +196,16 @@ const checkout = () => {
 <div className="w-full py-2 md:py-0 px-2">
 <label htmlFor="zipCode">Zip code/Post code</label><br/>
 <input type="number" id="zipCode" placeholder="Your Zip Code" 
- className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setZipcode(e.target.value)}/>
+ className="border w-full h-8 rounded outline-none p-2 mt-2" onChange={e => setZipcode(e.target.value)} value={zipCode}/>
 </div>
  
+ <button className="btn-primary mt-4" onClick={saveUserInfo}>Save info</button>
 
 </div>
 
 
-
-
-{/* password and confirm password container */}
-{/* <div className="flex flex-col md:flex-row justify-between items-center py-2">
-
-<div className="w-full md:w-1/2 py-2 md:py-0 px-2">
-<label htmlFor="password">Password</label><br/> 
-<input type="password" id="password" placeholder="Your Password"
- className="border w-full h-8 rounded outline-none p-2 mt-2" />
-</div>
-
-<div cla ssName="w-full md:w-1/2 py-2 md:py-0 px-2">
-<label htmlFor="confirmPassword">Confirm Password</label><br />
-<input type="password" id="confirmPassword" placeholder="Confirm Your Password" 
-  className="border w-full h-8 rounded outline-none p-2 mt-2" />
-</div>
-
-</div> */}
-
-
-<button className="btn-primary mt-4" disabled={cart.length > 0 ? false : true}>Cash on delivery</button>
-<button className="btn-primary mt-4 ml-4" disabled={cart.length > 0 ? false : true}>Pay with Bkash</button>
+<button className="btn-primary mt-4" disabled={cart.length > 0 ? false : true} onClick={() => addOrder(onCashDelivery)}>Cash on delivery</button>
+<button className="btn-primary mt-4 ml-4" disabled={cart.length > 0 ? false : true} onClick={() => addOrder(bkash)}>Pay with Bkash</button>
 
 
    </div>
