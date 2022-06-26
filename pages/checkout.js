@@ -5,13 +5,18 @@ import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import BkashArea from "../components/BkashArea"
+
+
+export  const onCashDelivery = 'cash-on-delivery'
+export const bkash = 'bkash'
 
 
 const checkout = () => {
 
 
   const router = useRouter()
-  const {auth, setAuth, cart} = useContext(AuthenticationContext)
+  const {auth, setAuth, cart, setCart} = useContext(AuthenticationContext)
 
 
  const [address1, setAddress1] =  useState('')
@@ -20,9 +25,13 @@ const checkout = () => {
  const [phoneNumber, setPhoneNumber] =  useState('')
  const [zipCode, setZipcode] =  useState('')
 
+ const [showBkashForm, setShowBkashForm] =  useState(false)
+ 
 
- const onCashDelivery = 'cash-on-delivery'
- const bkash = 'bkash'
+ const [bkashNumber, setBkashNumber] =  useState('')
+ const [trxId, setTrxId] =  useState('')
+
+
 
  //if not authenticated
   useEffect(()=>{
@@ -121,12 +130,61 @@ const checkout = () => {
   //for adding order
   const addOrder = async (type) => {
 
-    if (type === onCashDelivery) {
-     
-      
-      
-      return
+   
+    const creds = {
+      products: cart,
+      paymentType: type
     }
+
+    if (type === bkash) {
+      creds.bkashNumber = bkashNumber
+      creds.trxId = trxId
+    }
+
+    const config = {
+      headers: {
+         "Authorization": `Bearer ${auth.token}`,
+      }
+    }
+
+    try {
+      const request = await axios.post('/api/order', creds, config)
+
+      localStorage.removeItem('cart')
+      setCart([])
+
+      toast.success('Order created successfully', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+  
+
+
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+  
+    }
+
+
+
+  }
+
+
+  const bkashFormShowHide = () => {
+    setShowBkashForm(!showBkashForm)
   }
 
   //calculate total price
@@ -211,10 +269,28 @@ pauseOnHover
 
 
 <button className="btn-primary mt-4" disabled={cart.length > 0 ? false : true} onClick={() => addOrder(onCashDelivery)}>Cash on delivery</button>
-<button className="btn-primary mt-4 ml-4" disabled={cart.length > 0 ? false : true} onClick={() => addOrder(bkash)}>Pay with Bkash</button>
+<button className="btn-primary mt-4 ml-4" disabled={cart.length > 0 ? false : true} onClick={bkashFormShowHide}>Pay with Bkash</button>
 
 
    </div>
+
+
+{
+  showBkashForm && <BkashArea
+  totalPrice={totalPrice}
+  bkashNumber={bkashNumber}
+  setBkashNumber={setBkashNumber}
+  trxId={trxId}
+  setTrxId={setTrxId}
+  addOrder={addOrder}
+/>
+
+}
+
+
+
+
+
    </div>
   )
 }

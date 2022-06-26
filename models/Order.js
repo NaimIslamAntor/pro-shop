@@ -30,6 +30,18 @@ const order = new Schema({
     required: true,
 },
 
+
+bkashNumber:{
+  type: String,
+  default: null,
+},
+
+trxId:{
+  type: String,
+  default: null,
+},
+
+
 deliversIn:{
   type: String,
   default: Date.now + 7,
