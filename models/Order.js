@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
+const date = new Date()
+
 const order = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,8 +46,14 @@ trxId:{
 
 deliversIn:{
   type: String,
-  default: Date.now + 7,
+  default: date.setDate(date.getDate() + 7),
 },
+
+deliversStatus:{
+  type: String,
+  default: 'not delivered yet',
+},
+
 
 },
 {

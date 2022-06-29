@@ -106,6 +106,15 @@ const Header = () => {
           </a> 
             
           }
+
+          {
+            auth && <Link href='/myorders'>
+            <a  className="px-4 py-2 uppercase hover:bg-blue-100 
+            rounded cursor-pointer transition">
+            My Orders
+          </a>
+            </Link>
+          }
              
             
           {

@@ -96,6 +96,24 @@ async function handler(req, res) {
              }
 
             break;
+
+
+            case 'GET':
+                const userEmail = req.user.email
+
+                try {
+
+                    const user = await User.findOne({email: userEmail})
+
+                    const getOrders = await Order.find({userId:user._id}).sort('-createdAt')
+
+                    res.json(getOrders)
+
+                } catch (error) {
+                    res.status(500).json({message: error.message})
+                }
+
+                break;
     
         default:
             res.status(405).json({message: 'Method not allowed'})
