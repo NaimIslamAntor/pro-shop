@@ -28,7 +28,7 @@ const Register = () => {
       router.push('/')
     }
 
-  }, [auth, setAuth])
+  }, [auth, setAuth, router])
 
  
 

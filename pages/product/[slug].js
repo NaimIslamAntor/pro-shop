@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import Image from 'next/image'
 
-const slug = ({product}) => {
+const Slug = ({product}) => {
 
 
     const router = useRouter()
@@ -172,7 +172,7 @@ className="border w-full h-8 rounded outline-none p-2 mt-2"  />
   )
 }
 
-export default slug
+export default Slug
 
 
 

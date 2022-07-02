@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 
 
-const myorders = () => {
+const Myorders = () => {
 
     const router = useRouter()
     const {auth} = useContext(AuthenticationContext)
@@ -71,4 +71,4 @@ const myorders = () => {
 
 
 
-export default myorders
+export default Myorders

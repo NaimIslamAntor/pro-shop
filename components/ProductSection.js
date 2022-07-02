@@ -8,6 +8,7 @@ const ProductSection = ({ products }) => {
 {
   products.map(product => {
     return  <Product
+    key={product.productSlug}
       src={product.productImage}
       name={product.productName}
       slug={product.productSlug}

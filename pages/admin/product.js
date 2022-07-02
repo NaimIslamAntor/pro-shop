@@ -29,7 +29,7 @@ const Product = () => {
 
       
 
-      }, [auth])
+      }, [auth, router])
 
 
   return (

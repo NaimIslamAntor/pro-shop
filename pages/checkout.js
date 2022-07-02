@@ -12,7 +12,7 @@ export  const onCashDelivery = 'cash-on-delivery'
 export const bkash = 'bkash'
 
 
-const checkout = () => {
+const Checkout = () => {
 
 
   const router = useRouter()
@@ -295,7 +295,7 @@ pauseOnHover
   )
 }
 
-export default checkout
+export default Checkout
 
 
 

@@ -21,7 +21,7 @@ const Login = () => {
       router.push('/')
     }
 
-  }, [auth, setAuth])
+  }, [auth, setAuth, router])
 
 
   const attemptLogin = async () => {
