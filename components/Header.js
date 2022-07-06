@@ -74,19 +74,19 @@ const Header = () => {
             Home
           </a>
           </Link>
-          <a
+          {/* <a
             href="#"
             className="px-4 py-2 uppercase hover:bg-blue-100 rounded transition"
           >
             About
-          </a>
-          <a
+          </a> */}
+          {/* <a
             href="#"
             className="px-4 py-2 uppercase hover:bg-blue-100 rounded transition"
           >
             Product
           </a>
-         
+          */}
           {
      
            !auth ? <> <Link href="/auth/register">
